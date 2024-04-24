@@ -28,11 +28,42 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      title: DataTypes.STRING,
-      description: DataTypes.TEXT,
-      date: DataTypes.DATE,
-      location: DataTypes.STRING,
-      ticketsAvailable: DataTypes.INTEGER,
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      category: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      venue: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      locationPoint: {
+        type: DataTypes.DECIMAL(11, 8),
+        allowNull: false,
+      },
+      startDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      endDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      ticketsAvailable: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false,

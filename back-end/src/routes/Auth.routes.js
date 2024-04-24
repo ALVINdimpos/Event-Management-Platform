@@ -8,16 +8,15 @@ const {
   changePassword,
   deleteAllUsers,
 } = require('../controllers/Auth.controller');
-const signupValidation = require('../middlewares/signupValidation');
-const { isLoggedIn } = require('../middlewares/isLoggedIn'); 
+const { authGuard } = require('../middlewares'); 
 const router = express.Router();
 
 // auth related routes
-router.post('/signup', signupValidation, signup);
+router.post('/signup', signup);
 router.post('/login', login);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password/:token', resetPassword);
-router.post('/change-password', isLoggedIn, changePassword);
+router.post('/change-password', authGuard, changePassword);
 router.delete('/delete-all', deleteAllUsers);
 
 module.exports = router;

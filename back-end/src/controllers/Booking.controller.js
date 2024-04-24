@@ -1,13 +1,14 @@
-const { Booking, Ticket, Event,User } = require('../models');
+const { Booking, Event, User } = require('../models');
 const logger = require('../utils/logger');
 const { validateFields } = require('../utils/validation');
+const { preparePagination, getTotalPages } = require('../utils/pagination');
 
 // Create a new booking
 const createBooking = async (req, res) => {
   try {
     const UserId = req.userId; // user id from logged-in user
     const { eventId, numTickets } = req.body;
-    
+
     // Validate required fields
     const fieldsToBeValidated = ['eventId', 'numTickets'];
     const missingFields = validateFields(req, fieldsToBeValidated);
@@ -62,24 +63,21 @@ const createBooking = async (req, res) => {
     res.status(500).json({ ok: false, message: 'Internal server error' });
   }
 };
+
+// Get a booking by ID
 const getBookingById = async (req, res) => {
   try {
     const { id } = req.params;
-    // Convert id to integer
     const bookingId = parseInt(id);
     const booking = await Booking.findByPk(bookingId, {
       include: [
         {
           model: Event,
-          as: 'event', 
+          as: 'event',
         },
         {
           model: User,
-          as: 'user', 
-        },
-        {
-          model: Ticket,
-          as: 'tickets', 
+          as: 'user',
         },
       ],
     });
@@ -98,12 +96,12 @@ const getBookingById = async (req, res) => {
     res.status(500).json({ ok: false, message: 'Internal server error' });
   }
 };
+
 // Delete a booking by ID
 const deleteBookingById = async (req, res) => {
   try {
     const { id } = req.params;
-    // convert id to integer
-   const bookingId = parseInt(id);
+    const bookingId = parseInt(id);
     const booking = await Booking.findByPk(bookingId);
     if (!booking) {
       logger.error(`Deleting Booking: Booking with ID ${id} not found`);
@@ -116,11 +114,11 @@ const deleteBookingById = async (req, res) => {
     res.status(500).json({ ok: false, message: 'Internal server error' });
   }
 };
-// cancel a booking 
+
+// Cancel a booking by ID
 const cancelBooking = async (req, res) => {
   try {
-    const { id } = req.params;
-    // convert id to integer
+    const { id } = req.query;
     const bookingId = parseInt(id);
     const booking = await Booking.findByPk(bookingId);
     if (!booking) {
@@ -129,15 +127,57 @@ const cancelBooking = async (req, res) => {
     }
     booking.isCancelled = true;
     await booking.save();
-    res.status(200).json({ ok: true, message: 'Booking cancelled successfully' });
+    res
+      .status(200)
+      .json({ ok: true, message: 'Booking cancelled successfully' });
   } catch (error) {
     logger.error(`Cancelling Booking: ${error.message}`);
     res.status(500).json({ ok: false, message: 'Internal server error' });
   }
 };
+
+// Get all bookings with pagination
+const getAllBookings = async (req, res) => {
+  try {
+    const { page, limit } = req.query;
+    const { offset, count } = preparePagination(page, limit);
+
+    const bookings = await Booking.findAndCountAll({
+      offset,
+      limit: count,
+      include: [
+        {
+          model: Event,
+          as: 'event',
+        },
+        {
+          model: User,
+          as: 'user',
+        },
+      ],
+    });
+
+    const totalPages = getTotalPages(bookings.count, count);
+
+    res.status(200).json({
+      ok: true,
+      message: 'Bookings retrieved successfully',
+      data: {
+        bookings: bookings.rows,
+        totalBookings: bookings.count,
+        totalPages,
+      },
+    });
+  } catch (error) {
+    logger.error(`Getting Bookings: ${error.message}`);
+    res.status(500).json({ ok: false, message: 'Internal server error' });
+  }
+};
+
 module.exports = {
   createBooking,
   getBookingById,
   deleteBookingById,
   cancelBooking,
+  getAllBookings,
 };

@@ -1,13 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const eventController = require('../controllers/Event.controller');
-const { isLoggedIn } = require('../middlewares/isLoggedIn'); 
+const { authGuard } = require('../middlewares'); 
 
 // Define routes for event-related operations
-router.post('/',isLoggedIn, eventController.createEvent);
-router.get('/', eventController.getAllEvents);
-router.get('/:id', eventController.getEventById);
-router.put('/:id', eventController.updateEvent);
-router.delete('/:id', eventController.deleteEventById);
+
+router.post('', authGuard, eventController.createEvent);
+router.put('/:eventId', authGuard, eventController.updateEvent);
+router.get('', eventController.getAllEvents);
+router.get('/users', authGuard, eventController.getEventsByUserId);
+router.get('/nearby', eventController.getEventsNearMe);
+router.get('/search', eventController.searchEvents);
+router.get('/:eventId', eventController.getEventById);
+router.get('/search/category', eventController.searchByCategory);
+router.get('/search/title', eventController.searchByTitle);
 
 module.exports = router;

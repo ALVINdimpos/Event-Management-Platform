@@ -14,12 +14,29 @@ module.exports = {
       },
       description: {
         type: Sequelize.TEXT,
+        allowNull: false,
       },
-      date: {
+      category: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      venue: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      locationPoint: {
+        type: Sequelize.DECIMAL(11, 8),
+        allowNull: false,
+      },
+      startDate: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      location: {
+      endDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      imageUrl: {
         type: Sequelize.STRING,
         allowNull: false,
       },
