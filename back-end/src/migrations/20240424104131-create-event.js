@@ -25,7 +25,7 @@ module.exports = {
         allowNull: false,
       },
       locationPoint: {
-        type: Sequelize.DECIMAL(11, 8),
+        type: Sequelize.STRING,
         allowNull: false,
       },
       startDate: {

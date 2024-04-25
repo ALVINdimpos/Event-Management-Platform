@@ -6,5 +6,6 @@ const ticketController = require('../controllers/Ticket.controller');
 router.post('/', ticketController.createTicket);
 router.get('/:id', ticketController.getTicketById);
 router.delete('/:id', ticketController.deleteTicketById);
+router.put('/check-validity/:id', ticketController.checkTicketValidity);
 
 module.exports = router;

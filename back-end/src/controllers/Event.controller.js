@@ -5,7 +5,6 @@ const { validateFields } = require('../utils/validation');
 const logger = require('../utils/logger');
 
 // Create event
-
 const createEvent = async (req, res) => {
   try {
     const {
@@ -70,9 +69,7 @@ const createEvent = async (req, res) => {
     });
   }
 };
-
 // update event
-
 const updateEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
@@ -408,7 +405,100 @@ const searchByTitle = async (req, res) => {
     });
   }
 };
+// search by date
+const searchByDate = async (req, res) => {
+  try {
+    const { page, limit, date } = req.query;
+    const { page: offset, limit: count } = preparePagination(page, limit);
 
+    const events = await Event.findAll({
+      where: {
+        [Op.or]: [
+          {
+            startDate: {
+              [Op.gte]: date,
+            },
+          },
+          {
+            endDate: {
+              [Op.lte]: date,
+            },
+          },
+        ],
+      },
+      order: [['createdAt', 'DESC']],
+      offset,
+      limit: count,
+    });
+
+    if (events.length === 0) {
+      return res.status(404).json({
+        error: true,
+        message: 'No events found for the specified date',
+      });
+    }
+
+    const totalEvents = await Event.count({
+      where: {
+        [Op.or]: [
+          {
+            startDate: {
+              [Op.gte]: date,
+            },
+          },
+          {
+            endDate: {
+              [Op.lte]: date,
+            },
+          },
+        ],
+      },
+    });
+    const totalPages = getTotalPages(totalEvents, count);
+
+    return res.status(200).json({
+      error: false,
+      message: 'Events retrieved successfully',
+      data: {
+        events,
+        totalEvents,
+        totalPages,
+      },
+    });
+  } catch (error) {
+    logger.error(`Searching Events by Date: ${error.message}`);
+    return res.status(500).json({
+      error: true,
+      message: 'Internal server error',
+    });
+  }
+};
+// delete event
+const deleteEvent = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+      logger.error(`Deleting Event: Event with ID ${eventId} not found`);
+      return res.status(404).json({
+        error: true,
+        message: 'Event not found',
+      });
+    }
+    await event.destroy();
+    logger.info(`Event with ID ${eventId} deleted successfully`);
+    return res.status(200).json({
+      error: false,
+      message: 'Event successfully deleted',
+    });
+  } catch (error) {
+    logger.error(`Deleting Event: ${error.message}`);
+    return res.status(500).json({
+      error: true,
+      message: 'Internal server error',
+    });
+  }
+};
 module.exports = {
   createEvent,
   getAllEvents,
@@ -419,4 +509,6 @@ module.exports = {
   searchEvents,
   searchByCategory,
   searchByTitle,
+  deleteEvent,
+  searchByDate,
 };

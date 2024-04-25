@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       locationPoint: {
-        type: DataTypes.DECIMAL(11, 8),
+        type: DataTypes.STRING,
         allowNull: false,
       },
       startDate: {
@@ -82,3 +82,4 @@ module.exports = (sequelize, DataTypes) => {
 
   return Event;
 };
+// "locationPoint":"28.9383, -1.9441" ,

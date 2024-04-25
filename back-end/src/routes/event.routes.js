@@ -14,5 +14,7 @@ router.get('/search', eventController.searchEvents);
 router.get('/:eventId', eventController.getEventById);
 router.get('/search/category', eventController.searchByCategory);
 router.get('/search/title', eventController.searchByTitle);
+router.delete('/:eventId', authGuard, eventController.deleteEvent);
+router.get('/search/date', eventController.searchByDate);
 
 module.exports = router;
