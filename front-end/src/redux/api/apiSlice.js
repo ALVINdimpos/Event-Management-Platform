@@ -80,7 +80,7 @@ export const apiSlice = createApi({
       query: (eventId) => `/events/${eventId}`,
     }),
     getEventsByUserId: builder.query({
-      query: () => "/events/user",
+      query: () => "/events/users",
     }),
     getEventsNearMe: builder.query({
       query: ({ lon, lat, distanceInKm }) => ({

@@ -48,7 +48,11 @@ const Login = () => {
             const decodedToken = jwtDecode(response.token);
             dispatch(setUser(decodedToken));
             // redirect to the home page
-            navigate('/');
+            if (decodedToken.roleId === 1) {
+                navigate('/dashboard');
+            } else {
+                navigate('/');
+            }
         } catch (error) {
             // Handle API errors or display a generic error message
             console.error('Login error:', error);
@@ -122,7 +126,7 @@ const Login = () => {
                                     placeholder='Enter your email or username'
                                     autoFocus
                                 />
-                                {errors.email && <div className='text-red-500 text-xs mt-1'>{errors.email}</div>}
+                                {errors.email && <div className='mt-1 text-xs text-red-500'>{errors.email}</div>}
                             </div>
                             <div className='mb-4'>
                                 <div className='flex justify-between'>
@@ -143,7 +147,7 @@ const Login = () => {
                                         placeholder='············'
                                     />
                                 </div>
-                                {errors.password && <div className='text-red-500 text-xs mt-1'>{errors.password}</div>}
+                                {errors.password && <div className='mt-1 text-xs text-red-500'>{errors.password}</div>}
                             </div>
                             <div className='mb-4'>
                                 <div className='block'>
@@ -162,7 +166,7 @@ const Login = () => {
                                 success && (
                                     <div className='mb-4'>
                                         <div className='block'>
-                                            <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative' role='alert'>
+                                            <div className='relative px-4 py-3 text-green-700 bg-green-100 border border-green-400 rounded' role='alert'>
                                                 <strong className='font-bold'>Well done!</strong>
                                                 <span className='block sm:inline'> {success}</span>
                                             </div>
@@ -175,7 +179,7 @@ const Login = () => {
                                 
                                 <div className='mb-4'>
                                     <div className='block'>
-                                        <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative' role='alert'>
+                                        <div className='relative px-4 py-3 text-red-700 bg-red-100 border border-red-400 rounded' role='alert'>
                                             <strong className='font-bold'>Holy smokes!</strong>
                                             <span className='block sm:inline'> {errors.general}</span>
                                         </div>
@@ -184,7 +188,7 @@ const Login = () => {
                             }                
                             <div className='mb-4'>
                                 <button
-                                    className='grid w-full px-5 py-2 text-sm text-center bg-purple-600 text-white align-middle border rounded-md shadow cursor-pointer select-none border-primary-500 bg-primary-500 hover:border-primary-600 hover:bg-primary-600 hover:text-white focus:border-primary-600 focus:bg-primary-600 focus:text-white focus:shadow-none'
+                                    className='grid w-full px-5 py-2 text-sm text-center text-white align-middle bg-purple-600 border rounded-md shadow cursor-pointer select-none border-primary-500 bg-primary-500 hover:border-primary-600 hover:bg-primary-600 hover:text-white focus:border-primary-600 focus:bg-primary-600 focus:text-white focus:shadow-none'
                                     type='submit'
                                     onClick={handleSubmit}
                                 >

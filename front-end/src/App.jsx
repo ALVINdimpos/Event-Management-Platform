@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import FindEventPage from "./pages/FindEvent";
 import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
+import Dashboard from './pages/Dashboard';
 export default function App() {
   return (
     <BrowserRouter>
@@ -12,6 +13,7 @@ export default function App() {
           <Route path="events" element={<FindEventPage />} />
         <Route path="*" element={<NoPage />} />
         <Route path="login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );
