@@ -6,11 +6,6 @@ a web application for managing events organized by  company. This platform will 
 - Users can book tickets for events
 - Users can manage their bookings
 - Admins can create, update, and delete events
-- Admins can view bookings for each event
-- Admins can view users who have booked tickets for each event
-- Admins can view the total number of tickets booked for each event
-- Admins can view the total revenue generated from each event
-- Admins can view the total revenue generated from all events
 
 ## Technologies
 - Node.js
@@ -42,4 +37,3 @@ a web application for managing events organized by  company. This platform will 
 ![image](https://i.imgur.com/bWVu0pW.png)
 ![image](https://i.imgur.com/jFEPqTq.png)
 ![image](https://i.imgur.com/Hs6cjcl.png)
-![image](https://i.imgur.com/1Z2Z2Zz.png)
